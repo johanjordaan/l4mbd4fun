@@ -1,10 +1,10 @@
-name:                l4mbd4
+name:                l4mbd4fun
 version:             0.1.0.0
-github:              "githubuser/l4mbd4"
+github:              "johanjordaan/l4mbd4fun"
 license:             BSD3
-author:              "Author name here"
-maintainer:          "example@example.com"
-copyright:           "2019 Author name here"
+author:              "johan jordaan"
+maintainer:          "djjordaan@gmail.com"
+copyright:           "2019 johan jordaan"
 
 extra-source-files:
 - README.md
@@ -17,7 +17,7 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/githubuser/l4mbd4#readme>
+description:         Please see the README on GitHub at <https://github.com/johanjordaan/l4mbd4fun#readme>
 
 dependencies:
 - base >= 4.7 && < 5
@@ -27,7 +27,7 @@ library:
   source-dirs: src
 
 executables:
-  l4mbd4-exe:
+  l4mbd4fun-exe:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
@@ -35,7 +35,7 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - l4mbd4
+    - l4mbd4fun
 
 tests:
   l4mbd4-test:
@@ -46,5 +46,5 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - l4mbd4
+    - l4mbd4fun
     - hspec

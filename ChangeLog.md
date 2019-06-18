@@ -1,3 +1,3 @@
-# Changelog for l4mbd4
+# Changelog for l4mbd4fun
 
 ## Unreleased changes
