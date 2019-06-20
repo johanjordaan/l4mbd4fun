@@ -44,7 +44,7 @@ parseLambda = do
 
 parseExpr :: Parser L4mbd4Val
 parseExpr = parseVariable
-         <|> parseDef
+         <|> (try parseDef <|> parseId)
          <|> parseLambda
          <|> do char '('
                 x <- parseExprList
@@ -58,7 +58,7 @@ parseExprList = do
   spaces
   return $ List x
 
-readExpr :: String -> String
+readExpr :: String -> L4mbd4Val
 readExpr input = case parse parseExprList "l4mbd4fun" input of
-   Left err -> "No match: " ++ show err
-   Right val -> show val
+   Left err -> Error $ show err
+   Right val -> val
