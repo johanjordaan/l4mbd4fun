@@ -4,19 +4,44 @@ import Test.Hspec
 import Parser
 
 parserSpec = do
-  describe "actionDef" $ do
+  describe "readExpr" $ do
     it "should parse a simple lambda expression" $ do {
-      readExpr "\\z.\\k.j"
+      readExpr "x y"
       `shouldBe`
-      "Found value: Lambda (Variable \"z\") (Lambda (Variable \"k\") (Variable \"j\"))"
+      "List [Variable \"x\",Variable \"y\"]"
     }
     it "should parse a simple lambda expression" $ do {
-      readExpr "\\z.\\k.j x"
+      readExpr "x y "
       `shouldBe`
-      "Found value: Lambda (Variable \"z\") (Lambda (Variable \"k\") (Variable \"j\"))"
+      "List [Variable \"x\",Variable \"y\"]"
     }
-    it "should parse a simple lambda 'program'" $ do {
-      readExpr "I:=\\x.x?\\z.\\k.j x"
+    it "should parse a simple lambda expression" $ do {
+      readExpr " I:=a b  \\x.x"
       `shouldBe`
-      "Found value: Program (List [Def (Id \"I\") (Lambda (Variable \"x\") (Variable \"x\"))]) (Lambda (Variable \"z\") (Lambda (Variable \"k\") (Variable \"j\")))"
+      "List [Def (Id \"I\") (List [Variable \"a\",Variable \"b\",Lambda (Variable \"x\") (List [Variable \"x\"])])]"
+    }
+    it "should parse a simple lambda expression" $ do {
+      readExpr "\\x.x"
+      `shouldBe`
+      "List [Lambda (Variable \"x\") (List [Variable \"x\"])]"
+    }
+    it "should parse a simple lambda expression" $ do {
+      readExpr "\\x.x  \\z.\\k.z"
+      `shouldBe`
+      "List [Lambda (Variable \"x\") (List [Variable \"x\",Lambda (Variable \"z\") (List [Lambda (Variable \"k\") (List [Variable \"z\"])])])]"
+    }
+    it "should parse a simple lambda expression" $ do {
+      readExpr "(\\x.x k)  \\z.\\k.z"
+      `shouldBe`
+      "List [Brackets (List [Lambda (Variable \"x\") (List [Variable \"x\",Variable \"k\"])]),Lambda (Variable \"z\") (List [Lambda (Variable \"k\") (List [Variable \"z\"])])]"
+    }
+    it "should parse a simple lambda expression" $ do {
+      readExpr "((\\x.x k) k)  \\z.\\k.z"
+      `shouldBe`
+      "List [Brackets (List [Brackets (List [Lambda (Variable \"x\") (List [Variable \"x\",Variable \"k\"])]),Variable \"k\"]),Lambda (Variable \"z\") (List [Lambda (Variable \"k\") (List [Variable \"z\"])])]"
+    }
+    it "should parse a simple lambda expression" $ do {
+      readExpr "(\\x.x) y"
+      `shouldBe`
+      (show $ List [Brackets $ List [(Lambda (Variable "x") (List [Variable "x"]))], Variable "y"])
     }
