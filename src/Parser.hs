@@ -7,8 +7,8 @@ import Control.Monad
 data L4mbd4Val = Variable String
                | Id String
                | List [L4mbd4Val]
-               | Def L4mbd4Val L4mbd4Val
-               | Lambda L4mbd4Val L4mbd4Val
+               | Def String L4mbd4Val
+               | Lambda String L4mbd4Val
                | Brackets L4mbd4Val
                | Error String
                deriving (Eq,Show)
@@ -28,19 +28,21 @@ parseVariable = do
 
 parseDef :: Parser L4mbd4Val
 parseDef = do
-  name <- parseId
+  Id name <- parseId
+  spaces
   char ':'
   char '='
+  spaces
   body <- parseExprList
   return $ Def name body
 
 parseLambda :: Parser L4mbd4Val
 parseLambda = do
   char '\\'
-  v <- parseVariable
+  Variable name <- parseVariable
   char '.'
   body <- parseExprList
-  return $ Lambda v body
+  return $ Lambda name body
 
 parseExpr :: Parser L4mbd4Val
 parseExpr = parseVariable
