@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: c291077879cb4d9019e544e20c6a97b20d5d378626911d93ebd10173e6a6015f
+-- hash: d2309f3f7e7deec87981b51001d2f82c18012366a310db3371e34114b900ceb8
 
 name:           l4mbd4fun
 version:        0.1.0.0
@@ -27,6 +27,8 @@ source-repository head
 
 library
   exposed-modules:
+      Generator
+      L4mbd4Val
       Parser
   other-modules:
       Paths_l4mbd4fun
@@ -35,6 +37,7 @@ library
   build-depends:
       base >=4.7 && <5
     , parsec
+    , random
   default-language: Haskell2010
 
 executable l4mbd4fun-exe
@@ -48,6 +51,7 @@ executable l4mbd4fun-exe
       base >=4.7 && <5
     , l4mbd4fun
     , parsec
+    , random
   default-language: Haskell2010
 
 test-suite l4mbd4-test
@@ -64,4 +68,5 @@ test-suite l4mbd4-test
     , hspec
     , l4mbd4fun
     , parsec
+    , random
   default-language: Haskell2010

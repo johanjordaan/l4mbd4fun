@@ -4,14 +4,7 @@ import Text.ParserCombinators.Parsec hiding (spaces)
 import System.Environment
 import Control.Monad
 
-data L4mbd4Val = Variable String
-               | Id String
-               | List [L4mbd4Val]
-               | Def String L4mbd4Val
-               | Lambda String L4mbd4Val
-               | Brackets L4mbd4Val
-               | Error String
-               deriving (Eq,Show)
+import L4mbd4Val
 
 spaces :: Parser ()
 spaces = skipMany space
@@ -51,7 +44,7 @@ parseExpr = parseVariable
          <|> do char '('
                 x <- parseExprList
                 char ')'
-                return $ Brackets x
+                return $ x
 
 parseExprList :: Parser L4mbd4Val
 parseExprList = do
