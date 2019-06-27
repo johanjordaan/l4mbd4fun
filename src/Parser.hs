@@ -53,7 +53,7 @@ parseExprList = do
   spaces
   return $ List x
 
-readExpr :: String -> L4mbd4Val
+readExpr :: String -> Either String L4mbd4Val
 readExpr input = case parse parseExprList "l4mbd4fun" input of
-   Left err -> Error $ show err
-   Right val -> val
+   Left err -> Left $ show err
+   Right val -> Right val

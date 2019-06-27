@@ -29,6 +29,23 @@ generateId stdGen minLength maxLength =
     (Id name,nextNextStdGen)
 
 
+generateDef :: StdGen -> Int -> Int -> Int -> (L4mbd4Val,StdGen)
+generateDef stdGen depth minLength maxLength =
+  let
+    ((Id name),nextStdGen) = generateId stdGen minLength maxLength
+    (val, nextNextStrGen) = generate nextStdGen (depth-1)
+  in
+    (Def name val,nextNextStrGen)
+
+generateLambda :: StdGen -> Int -> Int -> Int -> (L4mbd4Val,StdGen)
+generateLambda stdGen depth minLength maxLength =
+  let
+    ((Variable name),nextStdGen) = generateVariable stdGen minLength maxLength
+    (val, nextNextStrGen) = generate nextStdGen (depth-1)
+  in
+    (Lambda name val,nextNextStrGen)
+
+
 generateList :: StdGen -> Int -> Int -> Int -> (L4mbd4Val,StdGen)
 generateList stdGen depth minLength maxLength =
   let
@@ -45,21 +62,35 @@ generateList stdGen depth minLength maxLength =
     (List (fst vals),snd vals)
 
 
+data GeneratorContext = GeneratorContext {
+  getStdGen::StdGen,
+  getVariables::[String],
+  getIds::[String]
+}
+
+data GeneratorConfig = GeneratorConfig{
+  minVariableLength::Int,
+  maxVariableLength::Int,
+  minIdLength::Int,
+  maxIdLength::Int,
+  minListLength::Int,
+  maxListLength::Int
+}
+
 generate :: StdGen -> Int -> (L4mbd4Val,StdGen)
+generate stdGen 0 =
+  let
+    (r,nextStdGen) = randomR (0::Int,1) stdGen
+  in case r of
+    0 -> generateVariable nextStdGen 1 1
+    1 -> generateId nextStdGen 1 1
+
 generate stdGen depth =
   let
-    (r,nextStdGen) = randomR (0::Int,5) stdGen
+    (r,nextStdGen) = randomR (0::Int,4) stdGen
   in case r of
-    --_ -> generateVariable nextStdGen 1 3
-    1 -> generateId nextStdGen 2 5
-    2 -> generateList nextStdGen depth 1 3
-    _ -> generateVariable nextStdGen 1 3
-
-{-
-data L4mbd4Val = Variable String
-               | Id String
-               | List [L4mbd4Val]
-               | Def String L4mbd4Val
-               | Lambda String L4mbd4Val
-               | Brackets L4mbd4Val
--}
+    0 -> generateVariable nextStdGen 1 1
+    1 -> generateId nextStdGen 1 1
+    2 -> generateList nextStdGen depth 1 10
+    3 -> generateDef nextStdGen depth 1 1
+    4 -> generateLambda nextStdGen depth 1 1
